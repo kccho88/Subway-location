@@ -33,20 +33,15 @@ Render에서 `npm install`이 자동으로 실행되지 않아서 `react-scripts
    - 아래로 스크롤하여 "Build & Deploy" 섹션 찾기
    - 또는 "Advanced" 버튼 클릭하여 확장
 
-5. **Install Command 추가**
-   - **"Install Command"** 필드 찾기
-   - 다음 명령어 입력:
+5. **Build Command 수정** ⚠️ **가장 중요!**
+   - **"Build Command"** 필드 찾기
+   - 기존 값이 `npm run build`라면 다음으로 변경:
      ```
-     npm install
+     npm install && npm run build
      ```
-   - 필드가 비어있거나 보이지 않으면 새로 추가
-
-6. **Build Command 확인**
-   - **"Build Command"** 필드 확인
-   - 다음이 입력되어 있는지 확인:
-     ```
-     npm run build
-     ```
+   - **주의**: `npm install`을 포함해야 합니다!
+   - `&&`로 두 명령어를 연결
+   - Render Static Site는 Install Command를 별도로 지원하지 않을 수 있음
 
 7. **Publish Directory 확인**
    - **"Publish Directory"** 필드 확인
@@ -81,9 +76,9 @@ Render에서 `npm install`이 자동으로 실행되지 않아서 `react-scripts
 3. **설정 입력 (중요!)**
    - **Name**: `subway-location`
    - **Branch**: `main`
-   - **Install Command**: `npm install` ⚠️ **반드시 추가!**
-   - **Build Command**: `npm run build`
+   - **Build Command**: `npm install && npm run build` ⚠️ **반드시 이렇게!**
    - **Publish Directory**: `build`
+   - **주의**: Build Command에 `npm install`을 포함해야 합니다!
 
 4. **배포 시작**
    - "Create Static Site" 클릭
@@ -94,11 +89,13 @@ Render에서 `npm install`이 자동으로 실행되지 않아서 `react-scripts
 
 Render Static Site 설정에서 다음을 확인하세요:
 
-- [ ] **Install Command**: `npm install`
-- [ ] **Build Command**: `npm run build`
+- [ ] **Build Command**: `npm install && npm run build` ⚠️ **가장 중요!**
 - [ ] **Publish Directory**: `build`
 - [ ] **Branch**: `main` (또는 `master`)
 - [ ] **Root Directory**: 비어있음 (또는 `./`)
+
+> ⚠️ **중요**: Render Static Site는 Install Command를 별도로 지원하지 않을 수 있습니다. 
+> Build Command에 `npm install && npm run build`를 입력하세요!
 
 ---
 
@@ -134,13 +131,21 @@ Render 대시보드에서:
 
 **Render 대시보드 → 프로젝트 → Settings → Build & Deploy**
 
-다음 3가지만 확인/추가:
+**Build Command를 다음으로 변경:**
 
-1. **Install Command**: `npm install`
-2. **Build Command**: `npm run build`
-3. **Publish Directory**: `build`
+```
+npm install && npm run build
+```
+
+**그리고 다음 확인:**
+
+1. **Build Command**: `npm install && npm run build` ⚠️ **필수!**
+2. **Publish Directory**: `build`
 
 저장 후 재배포하면 해결됩니다!
+
+> 💡 **팁**: Render Static Site는 Install Command 필드가 없을 수 있습니다. 
+> Build Command에 `npm install && npm run build`를 입력하면 됩니다!
 
 ---
 

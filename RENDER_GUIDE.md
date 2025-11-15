@@ -73,18 +73,14 @@
    - `main` 선택 (또는 `master`)
    - 기본값이 `main`이면 그대로 두면 됩니다
 
-3. **Install Command (설치 명령어)** ⚠️ **중요**
+3. **Build Command (빌드 명령어)** ⚠️ **중요!**
    ```
-   npm install
+   npm install && npm run build
    ```
-   - 의존성 패키지를 설치하는 명령어
-   - 이 명령어가 없으면 `react-scripts: not found` 에러 발생
-
-4. **Build Command (빌드 명령어)**
-   ```
-   npm run build
-   ```
-   - 이 명령어로 React 앱이 빌드됩니다
+   - **반드시 이렇게 입력하세요!**
+   - `npm install`로 의존성 설치 후 `npm run build`로 빌드
+   - Render Static Site는 Install Command를 별도로 지원하지 않을 수 있음
+   - 두 명령어를 `&&`로 연결하여 순차 실행
 
 5. **Publish Directory (배포 디렉토리)**
    ```
@@ -251,19 +247,15 @@
 2. **Settings 탭 클릭**
    - 왼쪽 메뉴에서 "Settings" 선택
 
-3. **Install Command 추가**
+3. **Build Command 수정** ⚠️ **가장 중요!**
    - "Build & Deploy" 섹션 찾기
-   - **"Install Command"** 필드에 다음 입력:
+   - **"Build Command"** 필드를 다음으로 변경:
      ```
-     npm install
+     npm install && npm run build
      ```
-   - 또는 빈 필드가 보이지 않으면 "Advanced" 옵션 확장
-
-4. **Build Command 확인**
-   - **"Build Command"** 필드에 다음이 있는지 확인:
-     ```
-     npm run build
-     ```
+   - **주의**: `npm run build`만 있으면 안 됩니다!
+   - `npm install && npm run build`로 변경해야 합니다
+   - 두 명령어를 `&&`로 연결
 
 5. **저장 및 재배포**
    - "Save Changes" 클릭

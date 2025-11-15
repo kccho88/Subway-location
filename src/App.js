@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
-const API_KEY = '774a4e43776b6363363248655a6b42';
+// 환경 변수에서 API 키 가져오기 (없으면 기본값 사용)
+const API_KEY = process.env.REACT_APP_API_KEY || '774a4e43776b6363363248655a6b42';
 const API_BASE_URL = 'http://swopenAPI.seoul.go.kr/api/subway';
 
 const SUBWAY_LINES = [

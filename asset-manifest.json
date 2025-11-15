@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Subway-location/static/css/main.5250a070.css",
+    "main.js": "/Subway-location/static/js/main.039582a3.js",
+    "index.html": "/Subway-location/index.html",
+    "main.5250a070.css.map": "/Subway-location/static/css/main.5250a070.css.map",
+    "main.039582a3.js.map": "/Subway-location/static/js/main.039582a3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5250a070.css",
+    "static/js/main.039582a3.js"
+  ]
+}

@@ -510,6 +510,12 @@ function App() {
         {error && (
           <div className="error-message">
             <strong>오류:</strong> {error}
+            {error.includes('CORS') || error.includes('연결 실패') && (
+              <div style={{ marginTop: '10px', fontSize: '0.9rem', color: '#666' }}>
+                💡 <strong>해결 방법:</strong> CORS 프록시를 통해 자동으로 재시도 중입니다. 
+                잠시 후 다시 시도하거나, 브라우저 콘솔(F12)에서 자세한 정보를 확인하세요.
+              </div>
+            )}
           </div>
         )}
 

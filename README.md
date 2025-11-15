@@ -49,6 +49,32 @@ npm run deploy
 
 배포 후 [https://kccho88.github.io/Subway-location](https://kccho88.github.io/Subway-location)에서 확인할 수 있습니다.
 
+### 다른 호스팅 서비스 배포
+
+이 프로젝트는 다양한 무료 호스팅 서비스에 배포할 수 있습니다:
+
+#### 🚀 Vercel (가장 추천)
+1. [https://vercel.com](https://vercel.com) 접속
+2. GitHub 계정으로 로그인
+3. "Add New..." → "Project"
+4. `kccho88/Subway-location` 저장소 선택
+5. "Deploy" 클릭
+6. 완료! 자동으로 URL 생성됨
+
+#### 🌐 Netlify
+1. [https://www.netlify.com](https://www.netlify.com) 접속
+2. GitHub 계정으로 로그인
+3. "Add new site" → "Import an existing project"
+4. `kccho88/Subway-location` 저장소 선택
+5. "Deploy site" 클릭
+
+#### 📦 Render
+1. [https://render.com](https://render.com) 접속
+2. "New +" → "Static Site"
+3. GitHub 저장소 연결
+
+자세한 배포 가이드는 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참고하세요.
+
 ## 사용 방법
 
 ### 호선별 검색

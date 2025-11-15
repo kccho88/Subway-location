@@ -5,6 +5,80 @@ import './App.css';
 const API_KEY = process.env.REACT_APP_API_KEY || '774a4e43776b6363363248655a6b42';
 const API_BASE_URL = 'http://swopenAPI.seoul.go.kr/api/subway';
 
+// CORS 프록시 옵션 (여러 옵션 시도)
+const CORS_PROXIES = [
+  '', // 직접 호출 시도 (로컬 개발 환경)
+  'https://api.allorigins.win/raw?url=',
+  'https://corsproxy.io/?',
+  'https://api.codetabs.com/v1/proxy?quest=',
+];
+
+// CORS 프록시를 사용하여 URL 생성
+const getApiUrl = (path, proxyIndex = 1) => {
+  // 로컬 개발 환경에서는 직접 호출 시도
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return { url: `${API_BASE_URL}${path}`, useProxy: false };
+  }
+  
+  // 프로덕션 환경에서는 CORS 프록시 사용
+  const proxy = CORS_PROXIES[proxyIndex] || CORS_PROXIES[1];
+  if (!proxy) {
+    return { url: `${API_BASE_URL}${path}`, useProxy: false };
+  }
+  
+  const fullUrl = `${API_BASE_URL}${path}`;
+  return { 
+    url: `${proxy}${encodeURIComponent(fullUrl)}`, 
+    useProxy: true,
+    proxyIndex 
+  };
+};
+
+// 여러 프록시를 시도하는 함수
+const fetchWithRetry = async (apiPath, maxRetries = 3) => {
+  let lastError = null;
+  
+  // 직접 호출 먼저 시도 (로컬 환경)
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    try {
+      const { url } = getApiUrl(apiPath, 0);
+      const response = await fetch(url);
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  
+  // CORS 프록시를 순차적으로 시도
+  for (let i = 1; i <= Math.min(maxRetries, CORS_PROXIES.length - 1); i++) {
+    try {
+      const { url } = getApiUrl(apiPath, i);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        // 프록시가 HTML을 반환하는 경우 (에러 페이지)
+        if (typeof data === 'string' && data.includes('<!DOCTYPE')) {
+          continue; // 다음 프록시 시도
+        }
+        return data;
+      }
+    } catch (err) {
+      lastError = err;
+      continue; // 다음 프록시 시도
+    }
+  }
+  
+  throw lastError || new Error('모든 CORS 프록시 시도 실패');
+};
+
 const SUBWAY_LINES = [
   '1호선',
   '2호선',
@@ -44,9 +118,8 @@ function App() {
     setError(null);
 
     try {
-      const url = `${API_BASE_URL}/${API_KEY}/json/realtimePosition/${start}/${end}/${encodeURIComponent(line)}`;
-      const response = await fetch(url);
-      const data = await response.json();
+      const apiPath = `/${API_KEY}/json/realtimePosition/${start}/${end}/${encodeURIComponent(line)}`;
+      const data = await fetchWithRetry(apiPath);
 
       if (data.RESULT && data.RESULT.CODE !== 'INFO-000') {
         throw new Error(data.RESULT.MESSAGE || 'API 오류가 발생했습니다.');
@@ -70,6 +143,13 @@ function App() {
         return [];
       }
     } catch (err) {
+      // CORS 에러인지 확인
+      if (err.message.includes('Failed to fetch') || 
+          err.message.includes('CORS') || 
+          err.name === 'TypeError' ||
+          err.message.includes('모든 CORS 프록시 시도 실패')) {
+        throw new Error('API 연결 실패: CORS 정책으로 인해 브라우저에서 직접 API 호출이 차단되었습니다. 잠시 후 다시 시도해주세요.');
+      }
       throw new Error(err.message || '데이터를 가져오는 중 오류가 발생했습니다.');
     }
   }, []);

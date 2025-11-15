@@ -73,13 +73,20 @@
    - `main` 선택 (또는 `master`)
    - 기본값이 `main`이면 그대로 두면 됩니다
 
-3. **Build Command (빌드 명령어)**
+3. **Install Command (설치 명령어)** ⚠️ **중요**
+   ```
+   npm install
+   ```
+   - 의존성 패키지를 설치하는 명령어
+   - 이 명령어가 없으면 `react-scripts: not found` 에러 발생
+
+4. **Build Command (빌드 명령어)**
    ```
    npm run build
    ```
    - 이 명령어로 React 앱이 빌드됩니다
 
-4. **Publish Directory (배포 디렉토리)**
+5. **Publish Directory (배포 디렉토리)**
    ```
    build
    ```
@@ -230,7 +237,40 @@
 
 ## 🐛 문제 해결
 
-### 빌드 실패
+### 빌드 실패 - "react-scripts: not found" 에러
+
+**증상**: `sh: 1: react-scripts: not found` 에러 발생
+
+**원인**: Render에서 `npm install`이 자동으로 실행되지 않음
+
+**해결 방법**:
+
+1. **Render 대시보드에서 프로젝트 선택**
+   - 프로젝트 이름 클릭
+
+2. **Settings 탭 클릭**
+   - 왼쪽 메뉴에서 "Settings" 선택
+
+3. **Install Command 추가**
+   - "Build & Deploy" 섹션 찾기
+   - **"Install Command"** 필드에 다음 입력:
+     ```
+     npm install
+     ```
+   - 또는 빈 필드가 보이지 않으면 "Advanced" 옵션 확장
+
+4. **Build Command 확인**
+   - **"Build Command"** 필드에 다음이 있는지 확인:
+     ```
+     npm run build
+     ```
+
+5. **저장 및 재배포**
+   - "Save Changes" 클릭
+   - 자동으로 재배포 시작
+   - 또는 "Manual Deploy" → "Deploy latest commit"
+
+### 일반적인 빌드 실패
 
 **증상**: 배포가 실패하고 빌드 에러 발생
 
@@ -238,11 +278,13 @@
 1. 빌드 로그 확인 (Render 대시보드에서)
 2. 로컬에서 테스트:
    ```bash
+   npm install
    npm run build
    ```
 3. `package.json`의 빌드 스크립트 확인
-4. Build Command가 `npm run build`인지 확인
-5. Publish Directory가 `build`인지 확인
+4. Install Command가 `npm install`인지 확인
+5. Build Command가 `npm run build`인지 확인
+6. Publish Directory가 `build`인지 확인
 
 ### 사이트가 표시되지 않음
 
